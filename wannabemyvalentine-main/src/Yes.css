@@ -1,0 +1,71 @@
+.red-shadow {
+  text-shadow: rgb(234, 69, 69) 2px 2px 2px;
+}
+
+/* Envelope */
+
+.top,
+.bottom {
+  border-left: 135px solid transparent;
+  border-right: 135px solid transparent;
+  width: 0;
+  height: 0;
+  position: relative;
+}
+
+.top {
+  border-bottom: 120px solid #f75555;
+  top: -120px;
+  transform-origin: bottom;
+  z-index: 3;
+  transition: all 0.8s ease;
+  transform: rotateX(0deg);
+}
+
+.bottom {
+  border-bottom: 120px solid #d81616;
+  top: -70px;
+  z-index: 4;
+}
+
+.left,
+.right {
+  border-top: 85px solid transparent;
+  border-bottom: 85px solid transparent;
+  top: 0;
+  z-index: 4;
+}
+
+.left {
+  border-left: 135px solid #fe1919;
+  position: absolute;
+  left: 0;
+}
+
+.right {
+  border-right: 135px solid #fe1919;
+  position: absolute;
+  right: 0;
+}
+
+.back {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transition: all 1s ease;
+  z-index: 3;
+  transition-delay: 0.4s;
+  top: -50%; /* Adjusted for new proportion */
+}
+
+.envelope.fold .back {
+  z-index: 3;
+  transition-delay: 0.3s;
+  top: 0;
+}
+
+.envelope.fold .top {
+  transition-delay: 0.6s;
+  transform: rotateX(180deg);
+  z-index: 6;
+}
