@@ -1,39 +1,46 @@
 import "./App.css";
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
-import Background from "./components/Background";
-import {negativeTexts, positiveTexts} from "./buttonTexts";
+import {useState, useRef, useEffect} from "react";
+import {Howl} from "howler";
 import Yes from "./Yes";
+// import AudioPlayer from "./components/audio";
 
 function App() {
-  const navigate = useNavigate();
-  // No button
-  const [size, setSize] = useState(1);
-  const [textIndex, setTextIndex] = useState(0);
-  // Yes button
-  const [yesClicks, setYesClicks] = useState(0);
-  const [yesText, setYesText] = useState(0);
+  const [audio, setAudio] = useState<Howl | null>(null);
+  useEffect(() => {
+    const newAudio = new Howl({
+      src: [
+        "../audio/Stephen Sanchez - _Until I Found You_ (Official Audio) (mp3cut.net) (1).mp3",
+      ], // Your audio path
+      volume: 0.5,
+      autoplay: false, // Don't autoplay on load
+      onend: () => console.log("Audio playback ended"),
+    });
 
-  const handleNoClick = () => {
-    if (size < 0) {
-      return;
-    }
-    setSize((prevSize) => Math.round((prevSize - 0.05) * 100) / 100);
-    setTextIndex((prevIndex) => (prevIndex + 1) % negativeTexts.length);
-  };
+    setAudio(newAudio);
 
-  const handleYesClick = () => {
-    setYesClicks((prevClick) => prevClick + 1);
-    setYesText((prevText) => prevText + 1);
-    if (yesClicks === positiveTexts.length - 1) {
-      // Alert message
-      alert("You have been warned.");
-      navigate("/yes");
-    }
-  };
+    // Trigger auto-play after first user interaction (like scroll or page focus)
+    const handleUserInteraction = () => {
+      if (newAudio) {
+        newAudio.play();
+      }
+      // Remove event listener after the first interaction
+      window.removeEventListener("scroll", handleUserInteraction);
+      window.removeEventListener("focus", handleUserInteraction);
+    };
 
+    // Add event listeners for user interaction
+    window.addEventListener("scroll", handleUserInteraction);
+    window.addEventListener("focus", handleUserInteraction);
+
+    // Clean up the event listeners when the component is unmounted
+    return () => {
+      window.removeEventListener("scroll", handleUserInteraction);
+      window.removeEventListener("focus", handleUserInteraction);
+    };
+  }, []);
   return (
     <>
+      {/* <div></div> */}
       <Yes />
     </>
   );
